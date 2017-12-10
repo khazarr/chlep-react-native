@@ -6,52 +6,61 @@
 
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  ToolbarAndroid,
+  ListView
 } from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import styles from './styles.js'
+import ListItem from './components/ListItem.js'
 
 export default class App extends Component<{}> {
+  constructor(props) {
+    super(props)
+
+    const dataSource = new ListView.DataSource({
+       rowHasChanged: (row1, row2) => row1 !== row2
+    })
+     this.state = {
+       dataSource: dataSource.cloneWithRows([
+         {name: 'chlebek'},
+         {name: 'pieczywko'},
+         {name: 'bułeczki'},
+         {name: 'chlebek'},
+         {name: 'pieczywko'},
+         {name: 'bułeczki'},
+         {name: 'chlebek'},
+         {name: 'pieczywko'},
+         {name: 'bułeczki'},
+         {name: 'chlebek'},
+         {name: 'pieczywko'},
+         {name: 'bułeczki'},
+         {name: 'chlebek'},
+         {name: 'pieczywko'},
+         {name: 'bułeczki'},
+       ])
+     }
+  }
   render() {
     return (
+
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+      <ToolbarAndroid
+        style={styles.navbar}
+        title="🍞 chlep"/>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this._renderItem.bind(this)}
+          style={styles.listView}/>
       </View>
     );
   }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  _renderItem(task) {
+    //a method for building each list ListItem
+    return (
+      <ListItem task={task} />
+    )
+  }
+}
